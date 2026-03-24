@@ -1,0 +1,43 @@
+@baseUrl = http://localhost:3000
+
+### ==========================================
+### 1. Criar um novo Post (Create)
+### ==========================================
+POST {{baseUrl}}/post
+Content-Type: application/json
+
+{
+  "title": "Post de teste",
+  "content": "Este é um post de teste",
+  "author": "Cris"
+}
+
+### ==========================================
+### 2. Listar todos os Posts (Find All)
+### ==========================================
+GET {{baseUrl}}/post
+
+### ==========================================
+### 3. Buscar um Post específico por ID (Find One)
+### ==========================================
+GET {{baseUrl}}/post/2
+
+### ==========================================
+### 4. Atualizar um Post (Update)
+### ==========================================
+PATCH {{baseUrl}}/post/2
+Content-Type: application/json
+
+{
+    "author": "Cris Siqueira"
+}
+
+### ==========================================
+### 5. Deletar um Post (Remove)
+### ==========================================
+DELETE {{baseUrl}}/post/2
+
+### ==========================================
+### 6. Buscar Posts por termo/query (Search)
+### ==========================================
+GET {{baseUrl}}/post/search/post

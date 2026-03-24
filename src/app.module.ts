@@ -4,9 +4,11 @@ import { AppService } from './app.service';
 import { PostModule } from './post/post.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
+    PrometheusModule.register(),
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -19,7 +21,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         database: cfg.get<string>('DB_DATABASE'),
         autoLoadEntities: true,
         synchronize: true,
-        // cfg.get<string>('NODE_ENV') === 'production' ? false : true,
         charset: 'utf8mb4',
       }),
     }), PostModule],

@@ -1,0 +1,46 @@
+DOCUMENTAÇÃO GERAL DO PROJETO - TECH CHALLENGE FASE 2
+======================================================
+
+1. VISÃO GERAL
+Este projeto consiste em uma API RESTful desenvolvida com o framework NestJS (Node.js) e TypeScript, desenhada para atender os requisitos da "Fase 2 - Tech challenge" da FIAP. A aplicação principal gerencia um sistema de "Posts" (Blog/Notícias), persistindo dados em um banco de dados relacional MySQL.
+
+2. TECNOLOGIAS UTILIZADAS
+- Backend: NestJS (Node.js), TypeScript
+- Banco de Dados: MySQL 8.0
+- ORM: TypeORM
+- Testes: Jest
+- Containerização: Docker e Docker Compose
+- Monitoramento e Observabilidade: Prometheus e Grafana
+
+3. ENDPOINTS DISPONÍVEIS (Recursos de Post)
+As rotas da API foram desenvolvidas na controladora `PostController`:
+- POST /post : Cria um novo post (recebe title, content e author).
+- GET /post : Retorna a lista de todos os posts cadastrados.
+- GET /post/:id : Retorna detalhadamente um único post através do seu ID numérico.
+- PATCH /post/:id : Exerce atualizações parciais em um post existente.
+- DELETE /post/:id : Remove um post baseado no seu ID.
+- GET /post/search/:query : Rota exclusiva para busca de posts que contenham o termo (query) no título ou no conteúdo. O TypeORM utiliza o operador `Like` para realizar essa filtragem dinamicamente.
+
+4. TESTES UNITÁRIOS (Coverage > 70%)
+Utilizamos a suíte do Jest provida pelo NestJS para testar as regras de negócio:
+- post.controller.spec.ts: Testes simulando (mockando) os serviços e garantindo que os controladores respondem com o payload e status codes corretos.
+- post.service.spec.ts: Testes garantindo que as lógicas da aplicação funcionam corretamente utilizando Mocks do Repositório do TypeORM.
+* Resultado atingido: 100% dos testes passaram com êxito e batemos mais de 74% de cobertura de código (Code Coverage) total, incluindo Statements, Functions e Branches.
+
+5. CONTAINERIZAÇÃO (DOCKER)
+- Dockerfile: Configuramos um "Multi-stage Build" utilizando node:22-alpine para otimizar o tamanho e a performance da imagem gerada. Separamos a construção (instalação de dependências pesadas de dev) da imagem final (apenas arquivos distruitivos e dependências de produção).
+- .dockerignore: Arquivo para ignorar a pasta genérica "node_modules", "dist" local e arquivos de configuração git, melhorando o envio do contexto ao Daemon do Docker.
+- docker-compose.yml: O maestro da arquitetura. Ele sobe em paralelo e linka 4 serviços interdependentes numa network exclusiva:
+  1. "mysql_db": Banco de dados MySQL 8.0.
+  2. "nestjs_api": A API NodeJS gerada com a imagem do Dockerfile. Modificamos para conectar automaticamente via variaveis de ambiente DB_HOST="mysql".
+  3. "prometheus": O servidor rodando na porta 9090 analisando métricas.
+  4. "grafana": A interface gráfica (dashboard) ligada ao Prometheus rodando na porta 3001 e escutando logs e tempos de respostas.
+
+6. OBSERVABILIDADE (PROMETHEUS E GRAFANA)
+Para fechar os requisitos de governança e monitoramento, integramos o Prometheus:
+- API NestJS: Injetamos via npm (`@willsoto/nestjs-prometheus` + `prom-client`) a lib nativa para formatar endpoints do Prometheus. Exposição feita automaticamente na rota `http://localhost:3000/metrics`.
+- Prometheus.yml: Instruímos o container prometheus a visitar a porta 3000 da API `api` (via rede docker) de 5 em 5 segundos, guardando uma série temporal ("scrape") da atividade térmica da CPU, heap memory do Node e status do Http.
+
+======================================================
+DESENVOLVIDO PARA O TECH CHALLENGE - FASE 2
+======================================================

@@ -7,9 +7,9 @@ POST {{baseUrl}}/post
 Content-Type: application/json
 
 {
-  "title": "Post de teste",
-  "content": "Este é um post de teste",
-  "author": "Cris"
+  "title": "Teste de apresentação",
+  "content": "Post de teste para a apresentação",
+  "author": "João Peixoto"
 }
 
 ### ==========================================
@@ -25,19 +25,24 @@ GET {{baseUrl}}/post/2
 ### ==========================================
 ### 4. Atualizar um Post (Update)
 ### ==========================================
-PATCH {{baseUrl}}/post/2
+PATCH {{baseUrl}}/post/3
 Content-Type: application/json
 
 {
-    "author": "Cris Siqueira"
+    "author": "João Victor Peixoto"
 }
 
 ### ==========================================
 ### 5. Deletar um Post (Remove)
 ### ==========================================
-DELETE {{baseUrl}}/post/2
+DELETE {{baseUrl}}/post/3
 
 ### ==========================================
 ### 6. Buscar Posts por termo/query (Search)
 ### ==========================================
-GET {{baseUrl}}/post/search/post
+POST {{baseUrl}}/post/search
+Content-Type: application/json
+
+{
+    "query": "apresentação"
+}

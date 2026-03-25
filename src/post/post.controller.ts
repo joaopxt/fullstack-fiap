@@ -32,8 +32,8 @@ export class PostController {
     return this.postService.remove(+id);
   }
 
-  @Get('search/:query')
-  searchByTitleOrContent(@Param('query') query: string) {
+  @Post('search')
+  searchByTitleOrContent(@Body('query') query: string) {
     return this.postService.searchByTitleOrContent(query);
   }
 }

@@ -39,15 +39,15 @@ export class PostService {
   async update(id: number, updatePostDto: UpdatePostDto) {
     const post = await this.findOne(id);
 
-    this.postRepository.update(id, updatePostDto);
+    this.postRepository.update(post.id, updatePostDto);
 
-    return this.findOne(id);
+    return await this.findOne(post.id);
   }
 
   async remove(id: number) {
     const post = await this.findOne(id);
 
-    await this.postRepository.delete(id);
+    await this.postRepository.delete(post.id);
 
     return `Post com id #${id} removido com sucesso`;
   }
